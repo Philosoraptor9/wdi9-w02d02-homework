@@ -1,20 +1,14 @@
 console.log('I choose you, asshole!')
 
-// player vs. computer
-// variable (array of objects) for each
-// each draws 3 random cards 
-// player chooses one (random)
-// computer chooses one (random) (function - draw cards, deposit them in each player's array)
-// cards chosen are removed from deck permanantly
-// alternating
-// once 3 cards each are drawn, game begins (function - begin game, extract cards from each player's array)
-// player plays random card
-// computer plays random card
-// card w/ highest damage wins point (variable - cards in play)
+// game object - method for calling dealCards function 3 times
+//             - method for playing cards, player plays, then autoplayer plays
+//             - if check to compare damage of cards played
+//             - if one is higher than the other, (higher damange) wins!
+//             - discard both cards
 // display score
 // repeat
 // once both hands (3 cards drawn) are depleted, round over
-
+// new round, draw 3 new cards (?)
 
 const pokeDeck = [
     {
@@ -74,76 +68,70 @@ const pokeDeck = [
     }
   ];
 
-  let playerHand = [];
+const players = {  
+  playerHand: [],
+  autoPlayerHand: []
+};
 
-  let autoPlayerHand = [];
+const cardsInPlay = {
+  playerPlayed: [],
+  autoPlayerPlayed: [],
+};
 
-  let draw = 0;
+const discard = [];
 
- 
-  const playerDraw = (pokeDeck) =>{
-    for (let i = 0; i < pokeDeck.length; i++) {
-        let cardDrawn1 = (pokeDeck[Math.ceil(Math.random() * pokeDeck.length)]);
-        console.log(cardDrawn1);
-        playerHand.push(cardDrawn1);
-        return playerHand;
-    }
+let playerScore = 0;
+
+let autoPlayerScore = 0;
+
+
+const dealCard = (players) => {
+  console.log(`Dealt cards`);
+  let dealRandom = Math.floor(Math.random() * pokeDeck.length);
+  let cardToDeal1 = pokeDeck.splice(dealRandom, 1)[0];
+  let cardToDeal2 = pokeDeck.splice(dealRandom, 1)[0];
+    players.playerHand.push(cardToDeal1);
+    players.autoPlayerHand.push(cardToDeal2);
 }
 
-// const removeFromDeck = () => {
-//     if (cardDrawn1 === pokeDeck[i]){
-//     pokeDeck.splice(pokeDeck[i], 1);
-// } return pokeDeck;
-// }
+const Round = (players) => {
+  let playerPlay = Math.floor(Math.random() * players.playerHand.length);
+  let autoPlayerPlay = Math.floor(Math.random() * players.autoPlayerHand.length);
+    cardsInPlay.playerPlayed.push(players.playerHand.splice(playerPlay, 1)[0]);
+    cardsInPlay.autoPlayerPlayed.push(players.autoPlayerHand.splice(autoPlayerPlay, 1)[0]);
 
-// get the pokeDeck index back from cardDrawn1... ?
+  while (players.playerHand > 0 && players.autoPlayerHand > 0) {
+    if (cardsInPlay.playerPlayed[i].damage > cardsInPlay.autoPlayerPlayed[i].damage) {
+      playerScore++;
+        console.log(`Player played ${cardsInPlay.playerPlayed[i]}. It was super effective! Player wins!`);
+        discard.push(cardsInPlay.splice(playerPlayed, 1)[0], cardsInPlay.splice(autoPlayerPlayed, 1)[0]);
 
+  } else if (cardsInPlay.autoPlayerPlayed[i].damage > cardsInPlay.playerPlayed[i].damage) {
+     autoPlayerScore++;
+      console.log(`autoPlayer played ${cardsInPlay.autoPlayerPlayed[i]}. It was super effective! autoPlayer wins!`)
+      discard.push(cardsInPlay.splice(playerPlayed, 1)[0], cardsInPlay.splice(autoPlayerPlayed, 1)[0]);
 
-// function getRandomSubarray (arr, size) {
-//     var shuffled = arr.slice(0), i = arr.length, min = i - size, temp, index;
-//     while (i-- > min) {
-//         index = Math.floor((i + 1) * Math.random());
-//         temp = shuffled[index];
-//         shuffled[index] = shuffled[i];
-//         shuffled[i] = temp;
-//     }
-//     return shuffled.slice(min);
-// }
-
-const dealCard = (player) =>{
-  console.log(`Deal card to ${player}`);
-  let randomIndex = Math.floor(Math.random() * this.pokeDeck.length);
-  let cardToDeal = pokeDeck.splice(randomIndex, 1)[0];
-  playerHand.push(cardToDeal);
-},
-
-// Still duplicating cards drawn....
-
-let autoPlayerDraw = (pokeDeck) =>{
-    for (let i = 0; i < pokeDeck.length; i++) {
-        let cardDrawn2 = (pokeDeck[Math.ceil(Math.random() * pokeDeck.length)]);
-        console.log(cardDrawn2);
-        autoPlayerHand.push(cardDrawn2);
-        return autoPlayerHand;
-    }
+  } else {
+      console.log(`Player played ${cardsInPlay.playerPlayed[i]} and autoPlayer played ${cardsInPlay.autoPlayerPlayed[i]}. 
+      Neither were effective!`)
+      discard.push(cardsInPlay.splice(playerPlayed, 1)[0], cardsInPlay.splice(autoPlayerPlayed, 1)[0]);
+   }
+  }
 }
-  
-  // get down to 3 per hand
-  // remove from pokeDeck array after drawn
 
-playerDraw(pokeDeck);
-getRandomSubarray(pokeDeck, 18);
-autoPlayerDraw(pokeDeck);
-getRandomSubarray(pokeDeck, 18);
-playerDraw(pokeDeck);
-getRandomSubarray(pokeDeck, 18);
-autoPlayerDraw(pokeDeck);
-playerDraw(pokeDeck);
-getRandomSubarray(pokeDeck, 18);
-autoPlayerDraw(pokeDeck);
-getRandomSubarray(pokeDeck, 18);
+dealCard(players);
+dealCard(players);
+dealCard(players);
+Round(players);
+
+
+console.log(players.playerHand);
+console.log(players.autoPlayerHand);
+
 // console.log(pokeDeck);
-// console.log(pokeDeck.length)
-// console.log(playerHand);
-// console.log(autoPlayerHand);
+// console.log(pokeDeck.length);
 
+console.log(cardsInPlay);
+console.log(playerScore);
+console.log(autoPlayerScore);
+console.log(discard);
