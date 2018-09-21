@@ -1,4 +1,3 @@
-console.log('I choose you, asshole!')
 
 // game object - method for calling dealCards function 3 times
 //             - method for playing cards, player plays, then autoplayer plays
@@ -9,6 +8,12 @@ console.log('I choose you, asshole!')
 // repeat
 // once both hands (3 cards drawn) are depleted, round over
 // new round, draw 3 new cards (?)
+
+// jQuery add - ins:
+// Button for dealing cards - disappears after hand is dealt, re-appears after each round
+// Button to start the game - plays cards in hand (1 by 1?), displays message declaring winner or loser of each hand
+// Scoreboard - displays the whole game, updates after each hand
+// Player hand - player should be able to see their hand (text?)
 
 const pokeDeck = [
     {
@@ -81,6 +86,7 @@ let autoPlayerPlayed = [];
 const discard = [];
 
 let playerScore = 0;
+
 let autoPlayerScore = 0;
 
 
@@ -102,19 +108,25 @@ const Round = (players) => {
   while (players['playerHand'].length > 0 && players['autoPlayerHand'].length > 0) {
     console.log(playerPlayed[0])
     console.log(autoPlayerPlayed[0])
+
     if (playerPlayed[0].damage > autoPlayerPlayed[0].damage) {
       playerScore++;
-      console.log(`Player played ${playerPlayed[0].name}. It was super effective! Player wins!`);
+      console.log(`Player played ${playerPlayed[0].name}. 
+      autoPlayer played ${autoPlayerPlayed[0].name}.
+      ${playerPlayed[0].name} was super effective! Player wins!`);
 
   } else if (autoPlayerPlayed[0].damage > playerPlayed[0].damage) {
      autoPlayerScore++;
-      console.log(`autoPlayer played ${autoPlayerPlayed[0].name}. It was super effective! autoPlayer wins!`);
+      console.log(`autoPlayer played ${autoPlayerPlayed[0].name}. 
+      Player played ${playerPlayed[0].name}. 
+      ${autoPlayerPlayed[0].name} was super effective! autoPlayer wins!`);
 
   } else {
-      console.log(`Player played ${playerPlayed[0].name} and autoPlayer played ${autoPlayerPlayed[0].name}. 
+      console.log(`Player played ${playerPlayed[0].name} and 
+      autoPlayer played ${autoPlayerPlayed[0].name}. 
       Neither were effective!`);
-
    } 
+
    discard.push(playerPlayed.splice(playerPlayed, 1)[0], autoPlayerPlayed.splice(autoPlayerPlayed, 1)[0]);
    return (playerScore, autoPlayerScore);
   } 
@@ -122,25 +134,36 @@ const Round = (players) => {
 }
 
 
+$('#deal').click(function() {
 dealCard(players);
 dealCard(players);
 dealCard(players);
-dealCard(players);
+console.log(players.playerHand);
+console.log(players.autoPlayerHand);
+for (let i = 0; i < players['playerHand'].length; i++){
+  const display = $('<li/>').text(JSON.stringify(players.playerHand[i].name));
+  $('ul').append(display)
+}
+})
+
+
+$('#start').click(function() {
 Round(players);
 Round(players);
 Round(players);
+Round(players);
+console.log(playerScore);
+console.log(autoPlayerScore);
+})
 
 // console.log(pokeDeck);
 // console.log(pokeDeck.length);
 
-console.log(players.playerHand);
+
 // console.log(players.playerHand.length);
-console.log(players.autoPlayerHand);
+
 // console.log(players.autoPlayerHand.length);
 
 console.log(discard);
-
-console.log(playerScore);
-console.log(autoPlayerScore);
 
 
