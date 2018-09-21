@@ -73,15 +73,14 @@ const players = {
   autoPlayerHand: []
 };
 
-const cardsInPlay = {
-  playerPlayed: [],
-  autoPlayerPlayed: [],
-};
+
+let playerPlayed = []; 
+
+let autoPlayerPlayed = [];
 
 const discard = [];
 
 let playerScore = 0;
-
 let autoPlayerScore = 0;
 
 
@@ -97,41 +96,51 @@ const dealCard = (players) => {
 const Round = (players) => {
   let playerPlay = Math.floor(Math.random() * players.playerHand.length);
   let autoPlayerPlay = Math.floor(Math.random() * players.autoPlayerHand.length);
-    cardsInPlay.playerPlayed.push(players.playerHand.splice(playerPlay, 1)[0]);
-    cardsInPlay.autoPlayerPlayed.push(players.autoPlayerHand.splice(autoPlayerPlay, 1)[0]);
+    playerPlayed.push(players.playerHand.splice(playerPlay, 1)[0]);
+    autoPlayerPlayed.push(players.autoPlayerHand.splice(autoPlayerPlay, 1)[0]);
 
-  while (players.playerHand > 0 && players.autoPlayerHand > 0) {
-    if (cardsInPlay.playerPlayed[i].damage > cardsInPlay.autoPlayerPlayed[i].damage) {
+  while (players['playerHand'].length > 0 && players['autoPlayerHand'].length > 0) {
+    console.log(playerPlayed[0])
+    console.log(autoPlayerPlayed[0])
+    if (playerPlayed[0].damage > autoPlayerPlayed[0].damage) {
       playerScore++;
-        console.log(`Player played ${cardsInPlay.playerPlayed[i]}. It was super effective! Player wins!`);
-        discard.push(cardsInPlay.splice(playerPlayed, 1)[0], cardsInPlay.splice(autoPlayerPlayed, 1)[0]);
+      console.log(`Player played ${playerPlayed[0].name}. It was super effective! Player wins!`);
 
-  } else if (cardsInPlay.autoPlayerPlayed[i].damage > cardsInPlay.playerPlayed[i].damage) {
+  } else if (autoPlayerPlayed[0].damage > playerPlayed[0].damage) {
      autoPlayerScore++;
-      console.log(`autoPlayer played ${cardsInPlay.autoPlayerPlayed[i]}. It was super effective! autoPlayer wins!`)
-      discard.push(cardsInPlay.splice(playerPlayed, 1)[0], cardsInPlay.splice(autoPlayerPlayed, 1)[0]);
+      console.log(`autoPlayer played ${autoPlayerPlayed[0].name}. It was super effective! autoPlayer wins!`);
 
   } else {
-      console.log(`Player played ${cardsInPlay.playerPlayed[i]} and autoPlayer played ${cardsInPlay.autoPlayerPlayed[i]}. 
-      Neither were effective!`)
-      discard.push(cardsInPlay.splice(playerPlayed, 1)[0], cardsInPlay.splice(autoPlayerPlayed, 1)[0]);
-   }
-  }
+      console.log(`Player played ${playerPlayed[0].name} and autoPlayer played ${autoPlayerPlayed[0].name}. 
+      Neither were effective!`);
+
+   } 
+   discard.push(playerPlayed.splice(playerPlayed, 1)[0], autoPlayerPlayed.splice(autoPlayerPlayed, 1)[0]);
+   return (playerScore, autoPlayerScore);
+  } 
+  
 }
 
+
+dealCard(players);
 dealCard(players);
 dealCard(players);
 dealCard(players);
 Round(players);
-
-
-console.log(players.playerHand);
-console.log(players.autoPlayerHand);
+Round(players);
+Round(players);
 
 // console.log(pokeDeck);
 // console.log(pokeDeck.length);
 
-console.log(cardsInPlay);
+console.log(players.playerHand);
+// console.log(players.playerHand.length);
+console.log(players.autoPlayerHand);
+// console.log(players.autoPlayerHand.length);
+
+console.log(discard);
+
 console.log(playerScore);
 console.log(autoPlayerScore);
-console.log(discard);
+
+
